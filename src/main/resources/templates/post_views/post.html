@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{/fragments/head :: head}"/>
+
+<body class="sub_page">
+
+<!-- Wrap all main content in a container -->
+<div id="mainContent">
+
+  <div class="hero_area">
+    <div class="bg-box">
+      <img th:src="@{/images/nav-bg.jpg}" alt="">
+    </div>
+    <!-- header section starts -->
+    <header th:replace="~{/fragments/header :: header}"/>
+    <!-- header section ends -->
+  </div>
+
+  <!-- about section -->
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="post">
+        <h3><a th:text="${post.title}">Post Title</a></h3>
+        <h5 th:text="${'Author: ' + post.account.firstName +
+        ' | Created at: ' + #temporals.format(post.createdAt, 'dd MMM yyyy HH:mm') +
+        ' | Updated at: ' + #temporals.format(post.updatedAt, 'dd MMM yyyy HH:mm')}"></h5>
+        <p th:utext="${post.body}">Post Body</p>
+        <hr style="border: 1px solid grey;"/>
+        <div sec:authorize="isAuthenticated()" th:if="${isOwner}">
+          <a th:href="@{'/posts/' + ${post.id} + '/edit'}" class="btn btn-secondary btn-lg" tabindex="-1" role="button" aria-disabled="true">Edit</a>
+          <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="post" style="display:inline">
+            <button type="submit" class="btn btn-danger btn-lg">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer section -->
+  <footer th:replace="~{/fragments/footer :: footer}"/>
+  <!-- footer section -->
+
+</div>
+
+</body>
+</html>

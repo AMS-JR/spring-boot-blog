@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
+<head th:replace="~{/fragments/head :: head}"/>
+
+<body class="sub_page">
+
+<div class="hero_area">
+  <div class="bg-box">
+    <img th:src="@{/images/nav-bg.jpg}" alt="">
+  </div>
+  <!-- header section strats -->
+  <header th:replace="~{/fragments/header :: header}"/>
+  <!-- end header section -->
+</div>
+
+<!-- book section -->
+<section class="food_section layout_padding">
+  <div class="container">
+    <div class="heading_container">
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form_container">
+          <h3>Add post</h3>
+          <form th:action="@{/posts/add}"
+                th:object="${post}"
+                method="post">
+            <div>
+              <input id="account" name="account" type="hidden" class="form-control" th:field="*{account}" />
+            </div>
+            <div class="form-group">
+              <input id="title" th:field="*{title}" name="title" type="text" class="form-control" placeholder="title" />
+              <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="alert alert-danger" role="alert">Title Error</p>
+            </div>
+            <div class="form-group">
+              <textarea id="summernote" th:field="*{body}" name="body"></textarea>
+              <p th:if="${#fields.hasErrors('body')}" th:errors="*{body}" class="alert alert-danger" role="alert">Post Error</p>
+            </div>
+              <button type="submit" class="btn btn-primary my-2">
+                Add
+              </button>
+          </form>
+          <script>
+            $('#summernote').summernote({
+              placeholder: 'Add a new post',
+              tabsize: 1,
+              height: 100
+            });
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end book section -->
+
+<!-- footer section -->
+<footer th:replace="~{/fragments/footer :: footer}"/>
+<!-- footer section -->
+
+</body>
+
+</html>
