@@ -33,6 +33,7 @@ public class Account {
     private String photo;
     @Version
     private Integer version;
+    @Column(name="token")
     private String passwordResetToken;
     private LocalDateTime passwordResetTokenExpiry;
     @OneToMany(mappedBy = "account")

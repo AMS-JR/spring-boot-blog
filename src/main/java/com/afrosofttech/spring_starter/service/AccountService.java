@@ -8,4 +8,6 @@ public interface AccountService {
     Account save(Account account);
     Optional<Account> findOneByEmail(String email);
     Optional<Account> findById(Long id);
+    Optional<Account> findByToken(String token);
+    void updatePassword(Account account);
 }

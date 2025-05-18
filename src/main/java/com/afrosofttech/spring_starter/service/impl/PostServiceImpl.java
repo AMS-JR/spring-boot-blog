@@ -1,7 +1,8 @@
-package com.afrosofttech.spring_starter.service;
+package com.afrosofttech.spring_starter.service.impl;
 
 import com.afrosofttech.spring_starter.entity.Post;
 import com.afrosofttech.spring_starter.repository.PostRepository;
+import com.afrosofttech.spring_starter.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PostServiceImpl implements PostService{
+public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
     @Override

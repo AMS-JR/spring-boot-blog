@@ -1,11 +1,12 @@
-package com.afrosofttech.spring_starter.service;
+package com.afrosofttech.spring_starter.service.impl;
 
 import com.afrosofttech.spring_starter.entity.Account;
 import com.afrosofttech.spring_starter.entity.Authority;
 import com.afrosofttech.spring_starter.repository.AccountRepository;
+import com.afrosofttech.spring_starter.service.AccountService;
 import com.afrosofttech.spring_starter.util.constants.Role;
+import ognl.Token;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AccountServiceImpl implements AccountService ,UserDetailsService {
+public class AccountServiceImpl implements AccountService,UserDetailsService {
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -87,5 +88,17 @@ public class AccountServiceImpl implements AccountService ,UserDetailsService {
     @Override
     public Optional<Account> findById(Long id){
         return accountRepository.findById(id);
+    }
+    @Override
+    public Optional<Account> findByToken(String token){
+        return accountRepository.findByPasswordResetToken(token);
+    }
+    @Override
+    public void updatePassword(Account account) {
+        Account accountById = accountRepository.findById(account.getId()).orElseThrow(() -> new UsernameNotFoundException("Account not found"));
+        accountById.setPassword(passwordEncoder.encode(account.getPassword()));
+        accountById.setPasswordResetToken(null);
+        accountById.setPasswordResetTokenExpiry(null);
+        accountRepository.save(accountById);
     }
 }

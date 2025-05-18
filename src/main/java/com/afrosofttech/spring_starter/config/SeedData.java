@@ -3,7 +3,7 @@ package com.afrosofttech.spring_starter.config;
 import com.afrosofttech.spring_starter.entity.Account;
 import com.afrosofttech.spring_starter.entity.Authority;
 import com.afrosofttech.spring_starter.entity.Post;
-import com.afrosofttech.spring_starter.service.AccountServiceImpl;
+import com.afrosofttech.spring_starter.service.impl.AccountServiceImpl;
 import com.afrosofttech.spring_starter.service.AuthorityService;
 import com.afrosofttech.spring_starter.service.PostService;
 import com.afrosofttech.spring_starter.util.constants.Privilage;
@@ -37,7 +37,7 @@ public class SeedData implements CommandLineRunner {
         Account account03 = new Account();
         Account account04 = new Account();
 
-        account01.setEmail("account01@gmail.com");
+        account01.setEmail("amadou.asj.jallow@gmail.com");
         account01.setPassword("password");
         account01.setFirstName("user01");
         account01.setLastName("lastname01");
@@ -82,7 +82,7 @@ public class SeedData implements CommandLineRunner {
             Post post02 = new Post();
             post02.setTitle("Spring Boot Tips");
             post02.setBody("Here are some useful tips for Spring Boot beginners.");
-            post02.setAccount(account02);
+            post02.setAccount(account01);
             postService.save(post02);
 
 

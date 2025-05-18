@@ -1,7 +1,10 @@
 package com.afrosofttech.spring_starter.controller;
 
+import com.afrosofttech.spring_starter.dto.EmailDto;
 import com.afrosofttech.spring_starter.entity.Account;
-import com.afrosofttech.spring_starter.service.AccountServiceImpl;
+import com.afrosofttech.spring_starter.service.AccountService;
+import com.afrosofttech.spring_starter.service.EmailService;
+import com.afrosofttech.spring_starter.service.impl.AccountServiceImpl;
 import com.afrosofttech.spring_starter.util.constants.AppUtil;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -25,7 +28,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-import javax.naming.Binding;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +41,9 @@ import java.util.concurrent.TimeUnit;
 @Controller
 public class AccountController {
     @Autowired
-    private AccountServiceImpl accountService;
+    private AccountService accountService;
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Value("${password.token.reset.timeout.minutes}")
@@ -179,11 +183,47 @@ public class AccountController {
             account.setPasswordResetToken(resetToken);
             account.setPasswordResetTokenExpiry(LocalDateTime.now().plusMinutes(passwordTokenTimeout));
             accountService.save(account);
+            String resetLink = "http://localhost:8080/password/update?token=" + resetToken;
+            String msgBody = "To reset your password, click the link below:\n" + resetLink;
+            EmailDto emailDto = new EmailDto(account.getEmail(),
+                    msgBody, "Password Reset Request");
+            if(!emailService.sendSimpleMail(emailDto)){
+                attributes.addFlashAttribute("error", "Error sending email, Please contact admin.");
+                return "redirect:/password/forgot";
+            }
             attributes.addFlashAttribute("message", "Password reset email sent");
             return "redirect:/login";
         } else {
-            attributes.addAttribute("error", "No user found with the provided email.");
+            attributes.addFlashAttribute("error", "No user found with the provided email.");
             return "redirect:/password/forgot";
         }
+    }
+    @GetMapping("/password/update")
+    public String updatePassword(Model model, @RequestParam("token") String token,
+                                 RedirectAttributes attributes){
+        if(token.equals("") || token.equals(null)){
+            attributes.addFlashAttribute("error", "Invalid token");
+            return "redirect:/password/forgot";
+        }
+        Optional<Account> optionalAccount = accountService.findByToken(token);
+        if(optionalAccount.isPresent()){
+            Account account = accountService.findById(optionalAccount.get().getId()).get();
+            LocalDateTime now = LocalDateTime.now();
+            if(now.isAfter(optionalAccount.get().getPasswordResetTokenExpiry())){
+                attributes.addFlashAttribute("error", "Token expired");
+                return "redirect:/password/forgot";
+            }
+            model.addAttribute("account", account);
+            return "account_views/change_password";
+        }
+        attributes.addFlashAttribute("error", "Invalid token");
+        return "redirect:/password/forgot";
+    }
+    @PostMapping("/password/update")
+    public String changePassword(@ModelAttribute Account account, RedirectAttributes attributes) {
+        System.out.println("Password update endpoint hit!");
+        accountService.updatePassword(account);
+        attributes.addFlashAttribute("message", "Password updated successfully.");
+        return "redirect:/login";
     }
 }

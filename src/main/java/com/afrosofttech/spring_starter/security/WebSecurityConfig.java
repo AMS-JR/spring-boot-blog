@@ -1,6 +1,6 @@
 package com.afrosofttech.spring_starter.security;
 
-import com.afrosofttech.spring_starter.service.AccountServiceImpl;
+import com.afrosofttech.spring_starter.service.impl.AccountServiceImpl;
 import com.afrosofttech.spring_starter.util.constants.Privilage;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +22,7 @@ public class WebSecurityConfig {
 
     private static final String[] WHITELIST = {
             "/ ","/login", "/register", "/css/**", "/js/**", "/images/**", "/fonts/**", "/db-console/**",
-            "/password/forgot", "/password/reset"
+            "/password/forgot", "/password/reset", "/password/update/**"
     };
 
     private final AccountServiceImpl accountService;

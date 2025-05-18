@@ -2,11 +2,10 @@ package com.afrosofttech.spring_starter.controller;
 
 import com.afrosofttech.spring_starter.entity.Account;
 import com.afrosofttech.spring_starter.entity.Post;
-import com.afrosofttech.spring_starter.service.AccountServiceImpl;
+import com.afrosofttech.spring_starter.service.AccountService;
 import com.afrosofttech.spring_starter.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +21,7 @@ public class PostController {
     @Autowired
     private PostService postService;
     @Autowired
-    private AccountServiceImpl accountService;
+    private AccountService accountService;
     @GetMapping("/{id}")
     public String getPostById(@PathVariable Long id, Model model, Principal principal){
         Optional<Post> OptionalPost = postService.getById(id);
