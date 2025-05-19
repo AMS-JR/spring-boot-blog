@@ -1,4 +1,4 @@
-package com.afrosofttech.spring_starter.security;
+package com.afrosofttech.spring_starter.service;
 
 import com.afrosofttech.spring_starter.dto.BlogOperationPerformedEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;

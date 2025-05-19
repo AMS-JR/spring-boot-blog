@@ -24,7 +24,7 @@ public class EmailConfig {
     private String mailTransportProtocol;
     @Value("${spring.mail.properties.mail.smtp.auth}")
     private Boolean mailSmtpAuth;
-    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    @Value("${spring.mail.properties.mail.smtp.ssl.enable}")
     private Boolean mailSmtpEnable;
 
     @Bean
@@ -40,7 +40,7 @@ public class EmailConfig {
         props.put("mail.transport.protocol", mailTransportProtocol);
         props.put("mail.smtp.auth", mailSmtpAuth);
         props.put("mail.debug", "true");
-        props.put("mail.smtp.starttls.enable", mailSmtpEnable);
+        props.put("mail.smtp.ssl.enable", mailSmtpEnable);
         props.put("mail.smtp.connectiontimeout", "10000");
         props.put("mail.smtp.timeout", "10000");
         props.put("mail.smtp.writetimeout", "10000");

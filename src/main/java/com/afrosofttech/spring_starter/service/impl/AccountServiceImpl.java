@@ -4,11 +4,10 @@ import com.afrosofttech.spring_starter.dto.BlogOperationPerformedEvent;
 import com.afrosofttech.spring_starter.entity.Account;
 import com.afrosofttech.spring_starter.entity.Authority;
 import com.afrosofttech.spring_starter.repository.AccountRepository;
-import com.afrosofttech.spring_starter.security.KafkaEventProducerService;
+import com.afrosofttech.spring_starter.service.KafkaEventProducerService;
 import com.afrosofttech.spring_starter.service.AccountService;
 import com.afrosofttech.spring_starter.util.constants.OperationType;
 import com.afrosofttech.spring_starter.util.constants.Role;
-import ognl.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -68,13 +67,13 @@ public class AccountServiceImpl implements AccountService,UserDetailsService {
         }
         Account savedAccount = accountRepository.save(account);
 
-        BlogOperationPerformedEvent blogOperationPerformedEvent =
-                BlogOperationPerformedEvent.builder().operationType(OperationType.USER_CREATED.name())
-                .userId(savedAccount.getEmail()).entityId(savedAccount.getId().toString())
-                        .entityType(OperationType.USER_CREATED.name())
-                                .timestamp(LocalDateTime.now())
-                .details("From frontend").build();
-        kafkaEventProducerService.publishBlogOperationsPerformedEvent(blogOperationPerformedEvent);
+//        BlogOperationPerformedEvent blogOperationPerformedEvent =
+//                BlogOperationPerformedEvent.builder().operationType(OperationType.USER_CREATED.name())
+//                .userId(savedAccount.getEmail()).entityId(savedAccount.getId().toString())
+//                        .entityType(OperationType.USER_CREATED.name())
+//                                .timestamp(LocalDateTime.now())
+//                .details("From frontend").build();
+//        kafkaEventProducerService.publishBlogOperationsPerformedEvent(blogOperationPerformedEvent);
         return savedAccount;
     }
 

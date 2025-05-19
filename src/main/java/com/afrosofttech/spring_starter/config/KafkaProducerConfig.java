@@ -22,7 +22,6 @@ public class KafkaProducerConfig {
         return new NewTopic("blog-operation-performed-topic", 1, (short) 1);
     }
 
-
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> config = new HashMap<>();
