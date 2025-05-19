@@ -1,9 +1,12 @@
 package com.afrosofttech.spring_starter.service.impl;
 
+import com.afrosofttech.spring_starter.dto.BlogOperationPerformedEvent;
 import com.afrosofttech.spring_starter.entity.Account;
 import com.afrosofttech.spring_starter.entity.Authority;
 import com.afrosofttech.spring_starter.repository.AccountRepository;
+import com.afrosofttech.spring_starter.security.KafkaEventProducerService;
 import com.afrosofttech.spring_starter.service.AccountService;
+import com.afrosofttech.spring_starter.util.constants.OperationType;
 import com.afrosofttech.spring_starter.util.constants.Role;
 import ognl.Token;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +30,8 @@ public class AccountServiceImpl implements AccountService,UserDetailsService {
     private AccountRepository accountRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private KafkaEventProducerService kafkaEventProducerService;
 //    @Value("${spring.image.files}")
 //    private String photo_prefix;
 
@@ -60,8 +66,16 @@ public class AccountServiceImpl implements AccountService,UserDetailsService {
         if (account.getPhoto() == null) {
             account.setPhoto("/images/person.png");
         }
+        Account savedAccount = accountRepository.save(account);
 
-        return accountRepository.save(account);
+        BlogOperationPerformedEvent blogOperationPerformedEvent =
+                BlogOperationPerformedEvent.builder().operationType(OperationType.USER_CREATED.name())
+                .userId(savedAccount.getEmail()).entityId(savedAccount.getId().toString())
+                        .entityType(OperationType.USER_CREATED.name())
+                                .timestamp(LocalDateTime.now())
+                .details("From frontend").build();
+        kafkaEventProducerService.publishBlogOperationsPerformedEvent(blogOperationPerformedEvent);
+        return savedAccount;
     }
 
 
