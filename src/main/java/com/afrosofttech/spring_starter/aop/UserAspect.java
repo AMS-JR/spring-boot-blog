@@ -45,7 +45,7 @@ public class UserAspect {
 
         BlogOperationPerformedEvent event = BlogOperationPerformedEvent.builder()
                 .operationType(operationType)
-                .userId(account.getEmail())
+                .actor(account.getEmail())
                 .timestamp(LocalDateTime.now())
                 .details("From UserAspect (AOP)").build();
 
@@ -64,7 +64,7 @@ public class UserAspect {
 
         BlogOperationPerformedEvent event = BlogOperationPerformedEvent.builder()
                 .operationType(OperationType.USER_PASSWORD_CHANGED.name())
-                .userId(accountRepository.findById(account.getId()).get().getEmail())
+                .actor(accountRepository.findById(account.getId()).get().getEmail())
                 .timestamp(LocalDateTime.now())
                 .details("Password updated via AOP").build();
 
@@ -89,7 +89,7 @@ public class UserAspect {
 
         BlogOperationPerformedEvent event = BlogOperationPerformedEvent.builder()
                 .operationType(OperationType.EMAIL_SENT.name())
-                .userId(recipient != null ? recipient : "UNKNOWN")
+                .actor(recipient != null ? recipient : "UNKNOWN")
                 .timestamp(LocalDateTime.now())
                 .details("Email sent successfully via AOP").build();
 

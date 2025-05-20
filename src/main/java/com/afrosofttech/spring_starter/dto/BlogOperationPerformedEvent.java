@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class BlogOperationPerformedEvent {
 
     private String operationType;
-    private String userId;
+    private String actor;
     private String details;
     private LocalDateTime timestamp;
 
