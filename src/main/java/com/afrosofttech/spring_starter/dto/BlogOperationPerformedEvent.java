@@ -15,8 +15,6 @@ public class BlogOperationPerformedEvent {
 
     private String operationType;
     private String userId;
-    private String entityId;
-    private String entityType;
     private String details;
     private LocalDateTime timestamp;
 

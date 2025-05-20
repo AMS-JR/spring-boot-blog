@@ -6,6 +6,7 @@ package com.afrosofttech.spring_starter.util.constants;
 public enum OperationType {
     // User account operations
     USER_CREATED("User registration"),
+    USER_UPDATED("User updated"),
     USER_LOGON("User login"),
     USER_LOGOUT("User logout"),
     USER_DEACTIVATED("User deactivated"),

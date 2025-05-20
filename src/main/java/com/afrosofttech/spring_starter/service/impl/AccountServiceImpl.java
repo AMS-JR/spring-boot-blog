@@ -65,16 +65,8 @@ public class AccountServiceImpl implements AccountService,UserDetailsService {
         if (account.getPhoto() == null) {
             account.setPhoto("/images/person.png");
         }
-        Account savedAccount = accountRepository.save(account);
 
-//        BlogOperationPerformedEvent blogOperationPerformedEvent =
-//                BlogOperationPerformedEvent.builder().operationType(OperationType.USER_CREATED.name())
-//                .userId(savedAccount.getEmail()).entityId(savedAccount.getId().toString())
-//                        .entityType(OperationType.USER_CREATED.name())
-//                                .timestamp(LocalDateTime.now())
-//                .details("From frontend").build();
-//        kafkaEventProducerService.publishBlogOperationsPerformedEvent(blogOperationPerformedEvent);
-        return savedAccount;
+        return accountRepository.save(account);
     }
 
 
